@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Http\Resources\MediaResource;
 use App\Http\Resources\PostResource;
+use App\Models\Category;
 use App\Models\Media;
 use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
@@ -35,27 +36,36 @@ class PostController extends BaseController
             'description' => 'required',
             'user_id' => 'required',
             'content' => 'required',
+            'category_id' => 'required',
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-
         $post = Post::create($PostData);
 
+        $category = Category::find($request["category_id"]);
+
+        $post->categories()->attach($category);
 
 
-        foreach ($request["content"] as $post_content) {
+        $media = new Media;
+        $media->medias = $request->content;
+        $post->medias()->save($media);
+        /*foreach($request->content as $ct){
+
+        }*/
+        /*foreach ($request["content"] as $post_content) {
             $MediaData = [
                 "content" => $post_content,
                 "post_id" => $post->id
             ];
-            die(print_r($MediaData));
+            //die(print_r($MediaData));
             $media = Media::create($MediaData);
-        }
+        }*/
 
 
-        return $this->sendResponse([new PostResource($post), new MediaResource($media)], 'Post created successfully.', 201);
+        return $this->sendResponse(new PostResource($post), 'Post created successfully.', 201);
     }
 
     public function destroy(Post $post)

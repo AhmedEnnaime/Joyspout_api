@@ -12,4 +12,9 @@ class Media extends Model
     protected $fillable = [
         'content',
     ];
+
+    public function posts()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }
