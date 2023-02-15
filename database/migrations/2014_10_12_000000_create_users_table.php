@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->date('birthday');
             $table->string('phone');
+            $table->string('img');
             $table->timestamps();
         });
     }

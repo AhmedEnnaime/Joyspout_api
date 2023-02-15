@@ -19,6 +19,7 @@ class UserController extends BaseController
             'email' => 'required|email',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
+            'img' => 'required',
         ]);
 
         if ($validator->fails()) {
