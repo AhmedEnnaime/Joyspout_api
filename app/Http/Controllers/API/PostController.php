@@ -9,6 +9,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\Media;
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends BaseController
@@ -16,7 +17,7 @@ class PostController extends BaseController
     public function index()
     {
         $posts = Post::all();
-        //$posts = Post::select("posts.*", "medias.content as media")->join('medias', 'posts.id', '=', 'medias.post_id')->get();
+        //$posts = Post::select("posts.*", "media.content as media", "categories.name as post_category")->join('media', 'posts.id', '=', 'media.post_id')->join("category_post", "posts.id", "=", "category_post.post_id")->join("categories", "categories.id", "=", "category_post.category_id")->get();
         return $this->sendResponse(PostResource::collection($posts), 'Posts retrieved successfully.', 200);
     }
 
@@ -26,15 +27,11 @@ class PostController extends BaseController
 
         $PostData = [
             "description" => $request["description"],
-            "user_id" => $request["user_id"]
+            "user_id" => Auth::user()->id
         ];
-
-        //die(print_r($request["content"]));
-
 
         $validator = Validator::make($input, [
             'description' => 'required',
-            'user_id' => 'required',
             'content' => 'required',
             'category_id' => 'required',
         ]);
@@ -42,30 +39,31 @@ class PostController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
+
         $post = Post::create($PostData);
 
         $category = Category::find($request["category_id"]);
 
         $post->categories()->attach($category);
 
-
-        $media = new Media;
-        $media->medias = $request->content;
-        $post->medias()->save($media);
-        /*foreach($request->content as $ct){
-
-        }*/
-        /*foreach ($request["content"] as $post_content) {
-            $MediaData = [
-                "content" => $post_content,
-                "post_id" => $post->id
-            ];
-            //die(print_r($MediaData));
-            $media = Media::create($MediaData);
-        }*/
-
+        foreach ($request->content as $ct) {
+            $medias = new Media;
+            $medias->content = $ct;
+            $post->medias()->save($medias);
+        }
 
         return $this->sendResponse(new PostResource($post), 'Post created successfully.', 201);
+    }
+
+    public function show($id)
+    {
+        $post = Post::find($id);
+
+        if (is_null($post)) {
+            return $this->sendError('Post not found.');
+        }
+
+        return $this->sendResponse(new PostResource($post), 'Post retrieved successfully.', 200);
     }
 
     public function destroy(Post $post)

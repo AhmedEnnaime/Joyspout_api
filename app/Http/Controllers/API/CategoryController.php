@@ -6,6 +6,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use Illuminate\Http\Request;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Models\Post;
 use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends BaseController
@@ -14,6 +15,12 @@ class CategoryController extends BaseController
     {
         $categories = Category::all();
         return $this->sendResponse(CategoryResource::collection($categories), 'Categories retrieved successfully.', 200);
+    }
+
+    public function getPostCategories($id)
+    {
+        $categories = Post::find($id)->categories;
+        return $this->sendResponse(new CategoryResource($categories), 'Categories retrieved successfully.', 200);
     }
 
     public function store(Request $request)

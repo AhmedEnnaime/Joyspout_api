@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\MediaController;
 use App\Http\Controllers\API\PostController;
 
 /*
@@ -25,5 +26,7 @@ Route::controller(UserController::class)->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
     Route::resource('categories', CategoryController::class);
+    Route::get('medias/{id}', [MediaController::class, 'index']);
+    Route::get('categories/getPostCategories/{id}', [CategoryController::class, 'getPostCategories']);
     Route::resource('posts', PostController::class);
 });
