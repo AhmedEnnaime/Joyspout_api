@@ -45,10 +45,14 @@ class PostController extends BaseController
         $category = Category::find($request["category_id"]);
 
         $post->categories()->attach($category);
-
+       
         foreach ($request->content as $ct) {
             $medias = new Media;
-            $medias->content = $ct;
+            
+            $fileName = time().$ct->getClientOriginalName();
+            $ct->move(public_path('uploads'), $fileName);
+            $medias->content = $fileName;
+            //die(print_r($ct->getClientOriginalName()));
             $post->medias()->save($medias);
         }
 
