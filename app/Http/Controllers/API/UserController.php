@@ -26,9 +26,16 @@ class UserController extends BaseController
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $user = User::create($input);
+        $fileName = $request->img->getClientOriginalName();
+        $request->img->move(public_path('uploads'), $fileName);
+        $user = User::create([
+            "name" => $request->name,
+            "birthday" => $request->birthday,
+            "phone" => $request->phone,
+            "email" => $request->email,
+            "password" => bcrypt($request->password),
+            "img" => $fileName,
+        ]);
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;
 
