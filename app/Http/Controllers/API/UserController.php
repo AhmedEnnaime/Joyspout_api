@@ -62,4 +62,10 @@ class UserController extends BaseController
         $request->user()->tokens()->delete();
         return $this->sendResponse($request, 'User logged out successfully.', 200);
     }
+
+    public function getAuthUser()
+    {
+        $user = Auth::user();
+        return $this->sendResponse($user, 'Authenticated user.', 200);
+    }
 }

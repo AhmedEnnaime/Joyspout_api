@@ -25,6 +25,7 @@ Route::controller(UserController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
+    Route::get('userAuth', [UserController::class, 'getAuthUser']);
     Route::resource('categories', CategoryController::class);
     Route::get('medias/{id}', [MediaController::class, 'index']);
     Route::get('categories/getPostCategories/{id}', [CategoryController::class, 'getPostCategories']);
