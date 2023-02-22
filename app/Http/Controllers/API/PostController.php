@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
+use App\Http\Resources\CommentsResource;
 use App\Http\Resources\MediaResource;
 use App\Http\Resources\PostResource;
 use App\Models\Category;
@@ -45,11 +46,11 @@ class PostController extends BaseController
         $category = Category::find($request["category_id"]);
 
         $post->categories()->attach($category);
-       
+
         foreach ($request->content as $ct) {
             $medias = new Media;
-            
-            $fileName = time().$ct->getClientOriginalName();
+
+            $fileName = time() . $ct->getClientOriginalName();
             $ct->move(public_path('uploads'), $fileName);
             $medias->content = $fileName;
             //die(print_r($ct->getClientOriginalName()));
@@ -75,5 +76,12 @@ class PostController extends BaseController
         $post->delete();
 
         return $this->sendResponse([], 'Post deleted successfully.', 202);
+    }
+
+    public function getPostComments($post_id)
+    {
+        $post = Post::find($post_id);
+        $comments = $post->comments;
+        return $this->sendResponse(new CommentsResource($comments), 'Comments retrieved successfully.', 200);
     }
 }
