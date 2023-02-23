@@ -5,7 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CommentController;
+use App\Http\Controllers\API\LikeController;
 use App\Http\Controllers\API\MediaController;
+use App\Http\Controllers\API\PostCategoryController;
 use App\Http\Controllers\API\PostController;
 
 /*
@@ -28,11 +30,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
     Route::get('userAuth', [UserController::class, 'getAuthUser']);
     Route::resource('categories', CategoryController::class);
-    Route::get('medias/{id}', [MediaController::class, 'index']);
-    Route::get('categories/getPostCategories/{id}', [CategoryController::class, 'getPostCategories']);
+    //Route::get('medias/{id}', [MediaController::class, 'index']);
+    //Route::get('categories/getPostCategories/{id}', [CategoryController::class, 'getPostCategories']);
     Route::resource('posts', PostController::class);
     Route::post('comment/{post_id}', [CommentController::class, 'createComment']);
-    Route::get('post/comments/{post_id}', [PostController::class, 'getPostComments']);
+    //Route::get('post/comments/{post_id}', [PostController::class, 'getPostComments']);
     Route::delete('comment/{id}', [CommentController::class, 'deleteComment']);
     Route::put('comment/{id}', [CommentController::class, 'updateComment']);
+    //Route::get('postCategories/{post_id}', [PostCategoryController::class, 'index']);
+    Route::post('like/{post_id}', [LikeController::class, 'index']);
+    Route::delete('like/{id}', [LikeController::class, 'deleteLike']);
 });

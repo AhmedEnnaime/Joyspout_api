@@ -17,8 +17,8 @@ class PostController extends BaseController
 {
     public function index()
     {
-        $posts = Post::all();
-        //$posts = Post::select("posts.*", "media.content as media", "categories.name as post_category")->join('media', 'posts.id', '=', 'media.post_id')->join("category_post", "posts.id", "=", "category_post.post_id")->join("categories", "categories.id", "=", "category_post.category_id")->get();
+        //$posts = Post::select("posts.*", "users.*")->join("users", "users.id", "=", "posts.user_id")->get();
+        $posts = Post::with("comments.user", "medias", "likes.user")->get();
         return $this->sendResponse(PostResource::collection($posts), 'Posts retrieved successfully.', 200);
     }
 
