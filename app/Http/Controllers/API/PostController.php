@@ -4,8 +4,6 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController as BaseController;
-use App\Http\Resources\CommentsResource;
-use App\Http\Resources\MediaResource;
 use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\Media;
@@ -17,8 +15,7 @@ class PostController extends BaseController
 {
     public function index()
     {
-        //$posts = Post::select("posts.*", "users.*")->join("users", "users.id", "=", "posts.user_id")->get();
-        $posts = Post::with("comments.user", "medias", "likes.user")->get();
+        $posts = Post::with("user", "comments.user", "medias", "likes.user")->get();
         return $this->sendResponse(PostResource::collection($posts), 'Posts retrieved successfully.', 200);
     }
 
@@ -53,7 +50,6 @@ class PostController extends BaseController
             $fileName = time() . $ct->getClientOriginalName();
             $ct->move(public_path('uploads'), $fileName);
             $medias->content = $fileName;
-            //die(print_r($ct->getClientOriginalName()));
             $post->medias()->save($medias);
         }
 
@@ -78,10 +74,10 @@ class PostController extends BaseController
         return $this->sendResponse([], 'Post deleted successfully.', 202);
     }
 
-    public function getPostComments($post_id)
+    /*public function getPostComments($post_id)
     {
         $post = Post::find($post_id);
         $comments = $post->comments;
         return $this->sendResponse(new CommentsResource($comments), 'Comments retrieved successfully.', 200);
-    }
+    }*/
 }
