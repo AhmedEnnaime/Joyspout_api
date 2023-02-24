@@ -15,7 +15,7 @@ class PostController extends BaseController
 {
     public function index()
     {
-        $posts = Post::with("user", "comments.user", "medias", "likes.user")->get();
+        $posts = Post::with("user", "comments.user", "medias", "likes.user", "categories")->get();
         return $this->sendResponse(PostResource::collection($posts), 'Posts retrieved successfully.', 200);
     }
 
