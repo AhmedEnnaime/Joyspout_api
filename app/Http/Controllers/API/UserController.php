@@ -19,22 +19,21 @@ class UserController extends BaseController
             'email' => 'required|email',
             'password' => 'required|min:6',
             'c_password' => 'required|same:password',
-            'img' => 'required',
+            'img' => 'required|image',
         ]);
 
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
 
-        $fileName = $request->img->getClientOriginalName();
-        $request->img->move(public_path('uploads'), $fileName);
+        $image_path = $request->file('img')->store('image', 'public');
         $user = User::create([
             "name" => $request->name,
             "birthday" => $request->birthday,
             "phone" => $request->phone,
             "email" => $request->email,
             "password" => bcrypt($request->password),
-            "img" => $fileName,
+            "img" => $image_path,
         ]);
         $success['token'] =  $user->createToken('MyApp')->plainTextToken;
         $success['name'] =  $user->name;

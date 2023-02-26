@@ -47,9 +47,8 @@ class PostController extends BaseController
         foreach ($request->content as $ct) {
             $medias = new Media;
 
-            $fileName = time() . $ct->getClientOriginalName();
-            $ct->move(public_path('uploads'), $fileName);
-            $medias->content = $fileName;
+            $image_path = $ct->store('image', 'public');
+            $medias->content = $image_path;
             $post->medias()->save($medias);
         }
 
@@ -69,15 +68,12 @@ class PostController extends BaseController
 
     public function destroy(Post $post)
     {
-        $post->delete();
-
-        return $this->sendResponse([], 'Post deleted successfully.', 202);
+        if(Auth::user()->id == $post->user_id){
+            $post->delete();
+            return $this->sendResponse([], 'Post deleted successfully.', 202);
+        }else{
+            return $this->sendError('Invalid credentials.', ['error' => "Post doesn't belongs to this user"]);
+        }
+        
     }
-
-    /*public function getPostComments($post_id)
-    {
-        $post = Post::find($post_id);
-        $comments = $post->comments;
-        return $this->sendResponse(new CommentsResource($comments), 'Comments retrieved successfully.', 200);
-    }*/
 }
