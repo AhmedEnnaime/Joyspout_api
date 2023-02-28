@@ -78,10 +78,16 @@ class PostController extends BaseController
         
     }
 
-    public function getUserPosts()
+    public function getAuthPosts()
     {
         $user = User::with('posts.categories')->find(Auth::user()->id);
         $posts = $user->posts;
         return $this->sendResponse(new PostResource($posts), 'Posts retrieved successfully.', 200);
+    }
+
+    public function getUserPosts($user_id)
+    {
+        $posts = Post::with("user", "comments.user", "medias", "likes.user", "categories")->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
+        return $this->sendResponse(PostResource::collection($posts), 'User posts retrieved successfully.', 200);
     }
 }
