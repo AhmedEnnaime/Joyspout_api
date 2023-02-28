@@ -8,6 +8,7 @@ use App\Http\Resources\PostResource;
 use App\Models\Category;
 use App\Models\Media;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -75,5 +76,12 @@ class PostController extends BaseController
             return $this->sendError('Invalid credentials.', ['error' => "Post doesn't belongs to this user"]);
         }
         
+    }
+
+    public function getUserPosts()
+    {
+        $user = User::with('posts.categories')->find(Auth::user()->id);
+        $posts = $user->posts;
+        return $this->sendResponse(new PostResource($posts), 'Posts retrieved successfully.', 200);
     }
 }
