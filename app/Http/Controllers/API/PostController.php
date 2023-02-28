@@ -47,7 +47,6 @@ class PostController extends BaseController
 
         foreach ($request->content as $ct) {
             $medias = new Media;
-
             $image_path = $ct->store('image', 'public');
             $medias->content = $image_path;
             $post->medias()->save($medias);
@@ -66,6 +65,40 @@ class PostController extends BaseController
 
         return $this->sendResponse(new PostResource($post), 'Post retrieved successfully.', 200);
     }
+
+    /*public function update(Request $request, Post $post)
+    {
+        $input = $request->all();
+
+        $PostData = [
+            "description" => $request["description"],
+            "user_id" => Auth::user()->id
+        ];
+        die(print_r($input));
+
+        $validator = Validator::make($input, [
+            'description' => 'required',
+            'content' => 'required',
+            'category_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+        $post->description = $PostData["description"];
+        $post->save($PostData);
+        $category = Category::find($request["category_id"]);
+        $post->categories()->attach($category);
+        foreach ($request->content as $ct) {
+            $medias = new Media;
+            $image_path = $ct->store('image', 'public');
+            $medias->content = $image_path;
+            $post->medias()->save($medias);
+        }
+
+        return $this->sendResponse(new PostResource($post), 'Post updated successfully.', 200);
+
+    }*/
 
     public function destroy(Post $post)
     {
