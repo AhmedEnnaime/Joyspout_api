@@ -66,15 +66,15 @@ class PostController extends BaseController
         return $this->sendResponse(new PostResource($post), 'Post retrieved successfully.', 200);
     }
 
-    /*public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
         $input = $request->all();
-
+        $post = Post::findOrFail($id);
+        die(print_r($input));
         $PostData = [
             "description" => $request["description"],
             "user_id" => Auth::user()->id
         ];
-        die(print_r($input));
 
         $validator = Validator::make($input, [
             'description' => 'required',
@@ -85,30 +85,40 @@ class PostController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-        $post->description = $PostData["description"];
-        $post->save($PostData);
+
+        $post->update($PostData);
+
         $category = Category::find($request["category_id"]);
-        $post->categories()->attach($category);
+        $post->categories()->sync($category);
+
+        $mediaIds = $request->media_ids;
+
         foreach ($request->content as $ct) {
-            $medias = new Media;
-            $image_path = $ct->store('image', 'public');
-            $medias->content = $image_path;
-            $post->medias()->save($medias);
+            if (isset($mediaIds[$ct['id']])) {
+                $medias = Media::findOrFail($mediaIds[$ct['id']]);
+                $image_path = $ct->store('image', 'public');
+                $medias->content = $image_path;
+                $medias->save();
+            } else {
+                $medias = new Media;
+                $image_path = $ct->store('image', 'public');
+                $medias->content = $image_path;
+                $post->medias()->save($medias);
+            }
         }
 
         return $this->sendResponse(new PostResource($post), 'Post updated successfully.', 200);
+    }
 
-    }*/
 
     public function destroy(Post $post)
     {
-        if(Auth::user()->id == $post->user_id){
+        if (Auth::user()->id == $post->user_id) {
             $post->delete();
             return $this->sendResponse([], 'Post deleted successfully.', 202);
-        }else{
+        } else {
             return $this->sendError('Invalid credentials.', ['error' => "Post doesn't belongs to this user"]);
         }
-        
     }
 
     public function getAuthPosts()

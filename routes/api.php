@@ -6,8 +6,6 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\LikeController;
-use App\Http\Controllers\API\MediaController;
-use App\Http\Controllers\API\PostCategoryController;
 use App\Http\Controllers\API\PostController;
 
 /*
