@@ -68,9 +68,11 @@ class UserController extends BaseController
         return $this->sendResponse($user, 'Authenticated user.', 200);
     }
 
-    public function search($name)
+    public function search(Request $request)
     {
-        $users = User::where("name","like","%". $name. "%")->get();
-        return $this->sendResponse($users, 'Users.', 200);
+        $request->header("Access-Control-Allow-Origin: http://localhost:5173");
+        $query = $request->input('q');
+        $results = User::where('name', 'like', '%'.$query.'%')->get();
+        return $this->sendResponse($results, 'Users.', 200);
     }
 }
