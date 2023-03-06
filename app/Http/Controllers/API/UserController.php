@@ -72,7 +72,48 @@ class UserController extends BaseController
     {
         $request->header("Access-Control-Allow-Origin: http://localhost:5173");
         $query = $request->input('q');
-        $results = User::where('name', 'like', '%'.$query.'%')->get();
+        $results = User::where('name', 'like', '%' . $query . '%')->get();
         return $this->sendResponse($results, 'Users.', 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return $this->sendError('User not found.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'birthday' => 'required|date',
+            'phone' => 'required|min:10',
+            'email' => 'required|email',
+            'password' => 'required|min:6',
+            'c_password' => 'required|same:password',
+            'img' => 'image',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        }
+
+        $input = $request->all();
+        if ($request->hasFile('img')) {
+            $image_path = $request->file('img')->store('image', 'public');
+            $user->img = $image_path;
+        }
+
+        $user->name = $input['name'];
+        $user->birthday = $input['birthday'];
+        $user->phone = $input['phone'];
+        $user->email = $input['email'];
+        $user->password = bcrypt($input['password']);
+        $user->save();
+
+        $success['token'] =  $user->createToken('MyApp')->plainTextToken;
+        $success['name'] =  $user->name;
+
+        return $this->sendResponse($success, 'User updated successfully.', 200);
     }
 }

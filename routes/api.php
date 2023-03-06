@@ -27,6 +27,7 @@ Route::controller(UserController::class)->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('logout', [UserController::class, 'logout']);
     Route::get('userAuth', [UserController::class, 'getAuthUser']);
+    Route::get('update/{id}', [UserController::class, 'update']);
     Route::resource('categories', CategoryController::class);
     Route::resource('posts', PostController::class);
     Route::get('authPosts', [PostController::class, 'getAuthPosts']);
