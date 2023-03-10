@@ -11,13 +11,13 @@
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   [Simple, fast routing engine](https://laravel.com/docs/routing).
+-   [Powerful dependency injection container](https://laravel.com/docs/container).
+-   Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+-   Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+-   Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+-   [Robust background job processing](https://laravel.com/docs/queues).
+-   [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
@@ -35,19 +35,19 @@ We would like to extend our thanks to the following sponsors for funding Laravel
 
 ### Premium Partners
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+-   **[Vehikl](https://vehikl.com/)**
+-   **[Tighten Co.](https://tighten.co)**
+-   **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+-   **[64 Robots](https://64robots.com)**
+-   **[Cubet Techno Labs](https://cubettech.com)**
+-   **[Cyber-Duck](https://cyber-duck.co.uk)**
+-   **[Many](https://www.many.co.uk)**
+-   **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+-   **[DevSquad](https://devsquad.com)**
+-   **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+-   **[OP.GG](https://op.gg)**
+-   **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+-   **[Lendio](https://lendio.com)**
 
 ## Contributing
 
@@ -64,3 +64,156 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+# Joyspout Api
+
+These are the api used in Joyspout application, they're created with laravel with a sanctum authentication.
+
+## API Reference
+
+#### User Login
+
+```http
+  POST http://localhost:8000/api/login
+```
+
+| Parameter  | Type     | Description                |
+| :--------- | :------- | :------------------------- |
+| `email`    | `string` | **Required**. Your API key |
+| `password` | `string` | **Required**. Your API key |
+
+#### User Register
+
+```http
+  POST http://localhost:8000/api/register
+```
+
+| Parameter    | Type     | Description                |
+| :----------- | :------- | :------------------------- |
+| `name`       | `string` | **Required**. Your API key |
+| `birthday`   | `date`   | **Required**. Your API key |
+| `phone`      | `string` | **Required**. Your API key |
+| `email`      | `string` | **Required**. Your API key |
+| `password`   | `string` | **Required**. Your API key |
+| `c_password` | `string` | **Required**. Your API key |
+| `img`        | `string` | **Required**. Your API key |
+
+#### Add category
+
+```http
+  POST http://localhost:8000/api/categories
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name`    | `string` | **Required**. Your API key |
+
+#### Get all categories
+
+```http
+  GET http://localhost:8000/api/categories
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `name`    | `string` | **Required**. Your API key |
+
+#### Share post
+
+```http
+  POST http://localhost:8000/api/posts
+```
+
+| Parameter     | Type       | Description                |
+| :------------ | :--------- | :------------------------- |
+| `description` | `string`   | **Required**. Your API key |
+| `content`     | `string[]` | **Required**. Your API key |
+| `category_id` | `int[]`    | **Required**. Your API key |
+
+#### Update post
+
+```http
+  PUT http://localhost:8000/api/posts/{id}
+```
+
+| Parameter | Type  | Description                |
+| :-------- | :---- | :------------------------- |
+| `id`      | `int` | **Required**. Your API key |
+
+#### Delete post
+
+```http
+  POST http://localhost:8000/api/posts/{id}
+```
+
+| Parameter | Type  | Description                |
+| :-------- | :---- | :------------------------- |
+| `id`      | `int` | **Required**. Your API key |
+
+#### Add comment
+
+```http
+  POST http://localhost:8000/api/comment/{id}
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id`      | `int`    | **Required**. Your API key |
+| `content` | `string` | **Required**. Your API key |
+
+#### Delete comment
+
+```http
+  POST http://localhost:8000/api/comment/{id}
+```
+
+| Parameter | Type  | Description                |
+| :-------- | :---- | :------------------------- |
+| `id`      | `int` | **Required**. Your API key |
+
+#### Update comment
+
+```http
+  POST http://localhost:8000/api/comment/{id}
+```
+
+| Parameter | Type     | Description                |
+| :-------- | :------- | :------------------------- |
+| `id`      | `int`    | **Required**. Your API key |
+| `content` | `string` | **Required**. Your API key |
+
+#### Like post
+
+```http
+  POST http://localhost:8000/api/like/{id}
+```
+
+| Parameter | Type  | Description                                   |
+| :-------- | :---- | :-------------------------------------------- |
+| `id`      | `int` | **Required**. id of the post you want to like |
+
+#### Remove like
+
+```http
+  POST http://localhost:8000/api/like/{id}
+```
+
+| Parameter | Type  | Description                  |
+| :-------- | :---- | :--------------------------- |
+| `id`      | `int` | **Required**. id of the like |
+
+## Tech Stack
+
+**Client:** VueJs, Typescript, TailwindCss
+
+**Server:** Laravel
+
+**Authentication:** Sanctum
+
+## Feedback
+
+If you have any feedback, please reach out to me at ahmedennaime20@gmail.com or on Linkedin Ahmed Ennaime.
+
+## Support
+
+For support, email ahmedennaime20@gmail.com or reach me in Linkedin Ahmed Ennaime.
