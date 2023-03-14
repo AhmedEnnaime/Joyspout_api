@@ -70,7 +70,7 @@ class PostController extends BaseController
     {
         $input = $request->all();
         $post = Post::findOrFail($id);
-        die(print_r($input));
+
         $PostData = [
             "description" => $request["description"],
             "user_id" => Auth::user()->id
@@ -89,26 +89,22 @@ class PostController extends BaseController
         $post->update($PostData);
 
         $category = Category::find($request["category_id"]);
-        $post->categories()->sync($category);
 
-        $mediaIds = $request->media_ids;
+        $post->categories()->detach();
+        $post->categories()->attach($category);
+
+        $post->medias()->delete();
 
         foreach ($request->content as $ct) {
-            if (isset($mediaIds[$ct['id']])) {
-                $medias = Media::findOrFail($mediaIds[$ct['id']]);
-                $image_path = $ct->store('image', 'public');
-                $medias->content = $image_path;
-                $medias->save();
-            } else {
-                $medias = new Media;
-                $image_path = $ct->store('image', 'public');
-                $medias->content = $image_path;
-                $post->medias()->save($medias);
-            }
+            $medias = new Media;
+            $image_path = $ct->store('image', 'public');
+            $medias->content = $image_path;
+            $post->medias()->save($medias);
         }
 
         return $this->sendResponse(new PostResource($post), 'Post updated successfully.', 200);
     }
+
 
 
     public function destroy(Post $post)
