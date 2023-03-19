@@ -129,4 +129,21 @@ class PostController extends BaseController
         $posts = Post::with("user", "comments.user", "medias", "likes.user", "categories")->where('user_id', $user_id)->orderBy('created_at', 'desc')->get();
         return $this->sendResponse(PostResource::collection($posts), 'User posts retrieved successfully.', 200);
     }
+
+    public function searchByCategory(Request $request)
+    {
+        $categories = $request->input('categories');
+
+        // If no categories are selected, return all posts
+        if (empty($categories)) {
+            $posts = Post::all();
+        } else {
+
+            // Filter posts by selected categories
+            $posts = Post::whereHas('categories', function ($query) use ($categories) {
+                $query->whereIn('category_id', $categories);
+            })->get();
+        }
+        return $this->sendResponse(new PostResource($posts), 'Posts retrieved successfully.', 200);
+    }
 }
