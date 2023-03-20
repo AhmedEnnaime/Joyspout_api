@@ -132,17 +132,16 @@ class PostController extends BaseController
 
     public function searchByCategory(Request $request)
     {
-        $categories = $request->input('categories');
-
-        // If no categories are selected, return all posts
+        $categories = $request->categories;
+        
         if (empty($categories)) {
-            $posts = Post::all();
+            $posts = Post::with("user", "comments.user", "medias", "likes.user", "categories")->orderBy('created_at', 'desc')->get();
         } else {
 
             // Filter posts by selected categories
             $posts = Post::whereHas('categories', function ($query) use ($categories) {
-                $query->whereIn('category_id', $categories);
-            })->get();
+            $query->whereIn('category_id', $categories);
+            })->with("comments.user", "likes.user", "categories", "medias", "user")->orderBy('created_at', 'desc')->get();
         }
         return $this->sendResponse(new PostResource($posts), 'Posts retrieved successfully.', 200);
     }

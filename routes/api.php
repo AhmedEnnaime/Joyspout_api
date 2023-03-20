@@ -38,5 +38,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('like/{post_id}', [LikeController::class, 'index']);
     Route::delete('like/{id}', [LikeController::class, 'deleteLike']);
     Route::get('/search', [UserController::class, 'search']);
-    Route::get("posts/search", [PostController::class, 'searchByCategory']);
+    Route::post("posts/search", [PostController::class, 'searchByCategory']);
 });
