@@ -66,7 +66,7 @@ class PostController extends BaseController
         return $this->sendResponse(new PostResource($post), 'Post retrieved successfully.', 200);
     }
 
-    public function update(Request $request, $id)
+    public function updatePost(Request $request, $id)
     {
         $input = $request->all();
         $post = Post::findOrFail($id);

@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('update/{id}', [UserController::class, 'update']);
     Route::resource('categories', CategoryController::class);
     Route::resource('posts', PostController::class);
+    Route::post('editPost/{id}', [PostController::class, 'updatePost']);
     Route::get('authPosts', [PostController::class, 'getAuthPosts']);
     Route::get('profile/{user_id}', [PostController::class, 'getUserPosts']);
     Route::post('comment/{post_id}', [CommentController::class, 'createComment']);
