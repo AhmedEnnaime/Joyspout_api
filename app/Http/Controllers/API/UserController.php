@@ -47,10 +47,10 @@ class UserController extends BaseController
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $success['token'] =  $user->createToken('MyApp')->plainTextToken;
-            $success['name'] =  $user->name;
-            $success['id'] =  $user->id;
+            //$success['name'] =  $user->name;
+            //$success['id'] =  $user->id;
 
-            return $this->sendResponse($success, 'User login successfully.', 200);
+            return $this->sendResponse(["user" => $user, "token" => $success], 'User login successfully.', 200);
         } else {
             return $this->sendError('Invalid credentials.', ['error' => 'Email or password invalid']);
         }
